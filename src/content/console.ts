@@ -1,85 +1,91 @@
-import type { ConsoleCard } from "@/types/console";
-
 export const consoleContent = {
   cards: [
     {
-      id: "orchestration",
-      title: "Orchestration",
+      id: "ingestion",
+      title: "Document Ingestion",
       description:
-        "Intelligent routing across specialist agents based on intent",
-      icon: "Workflow",
+        "Upload, preprocess, and index documents into the knowledge base",
+      icon: "UploadCloud",
       color: "from-purple-500 to-purple-600",
       borderColor: "border-purple-500",
       bgColor: "bg-purple-500/5",
       textColor: "text-purple-500",
       subCards: [
         {
-          id: "orchestration-1",
-          title: "Multi-Agent Delegation",
+          id: "ingestion-1",
+          title: "Document Upload",
           content:
-            "An orchestrator agent decomposes complex requests and delegates to specialist sub-agents, each exposed as an MCP tool via Strands SDK.",
+            "Users upload documents to Amazon S3. Supported formats are automatically validated and rejected if unsupported.",
           description:
-            "Complex work gets broken into focused steps, each handled by the right specialist with the right tools. This pattern scales from one agent to dozens.",
+            "Ensures only the right file types are ingested and triggers the ingestion pipeline.",
         },
         {
-          id: "orchestration-2",
-          title: "MCP Tool Gateway",
+          id: "ingestion-2",
+          title: "Preprocessing & Chunking",
           content:
-            "AgentCore MCP Gateway routes tool calls to serverless functions. Any API, database, or internal system is registered as a tool target.",
+            "Documents are preprocessed: headers/footers removed, formatting normalized, OCR applied if needed, and text extracted. Chunks are generated based on document type.",
           description:
-            "New data sources and systems become agent-callable tools through a standard protocol. No custom integration code per system.",
+            "Contracts → clause chunking, FAQs → QA chunking, Guidelines → section chunking, Reports → table-aware chunking.",
         },
         {
-          id: "orchestration-3",
-          title: "Intent-Based Routing",
+          id: "ingestion-3",
+          title: "Embedding Generation",
           content:
-            "The orchestrator reasons about what each request needs. Simple questions go to one agent; complex tasks fan out to multiple agents in sequence.",
+            "Text chunks are converted into embeddings using Amazon Bedrock.",
           description:
-            "No wasted compute on simple lookups, full multi-agent coordination when the task demands it. The routing logic lives in the prompt, not hardcoded.",
+            "Embeddings are stored in Amazon OpenSearch Serverless for semantic search.",
         },
         {
-          id: "orchestration-4",
-          title: "Model Fallback & Retry",
+          id: "ingestion-4",
+          title: "Knowledge Base Indexing",
           content:
-            "Agents are configured with fallback model chains and automatic retry logic. If a primary model is throttled or unavailable, the request routes to an alternate.",
+            "All chunks are indexed into the KB. Partial indexing triggers retry logic.",
           description:
-            "Production systems need resilience. A single model outage shouldn't take down the entire agent pipeline.",
+            "Ensures the KB is ready for retrieval with all ingested content.",
         },
       ],
     },
     {
-      id: "memory",
-      title: "Memory",
-      description: "Session and semantic memory for multi-turn context",
-      icon: "Brain",
-      color: "from-blue-500 to-blue-600",
-      borderColor: "border-blue-500",
-      bgColor: "bg-blue-500/5",
-      textColor: "text-blue-500",
+      id: "failure",
+      title: "Failure Handling & Retry",
+      description: "Ensure resilience and reliable responses across the system",
+      icon: "AlertTriangle",
+      color: "from-red-500 to-red-600",
+      borderColor: "border-red-500",
+      bgColor: "bg-red-500/5",
+      textColor: "text-red-500",
       subCards: [
         {
-          id: "memory-1",
-          title: "Session Memory",
+          id: "failure-1",
+          title: "Agent/API Throttling",
           content:
-            "AgentCore Memory loads an optimal window of conversation turns at the start of each request and persists new messages after each exchange.",
+            "Bedrock API calls monitor throttling events and retry automatically with exponential backoff.",
           description:
-            "Users have natural multi-turn conversations without repeating context. The agent picks up where you left off, across requests.",
+            "Prevents request failures due to rate limits and ensures consistent system behavior.",
         },
         {
-          id: "memory-2",
-          title: "Semantic Memory",
+          id: "failure-2",
+          title: "Search & Retrieval Errors",
           content:
-            "AgentCore Memory extracts facts and user preferences into dedicated namespaces that persist across sessions. Extraction rules and namespaces are configurable per use case.",
+            "OpenSearch or KB retrieval failures trigger automatic retries and alert logging.",
           description:
-            "The system learns over time. Preferences and key facts carry forward even when starting a new conversation. Enables personalization at scale.",
+            "Guarantees that temporary search issues do not break the user experience.",
+        },
+        {
+          id: "failure-3",
+          title: "Fallback Models",
+          content:
+            "Primary model errors or unavailability automatically route queries to backup models.",
+          description:
+            "Maintains high availability and ensures the user always gets a response.",
         },
       ],
     },
     {
-      id: "security",
-      title: "Security",
+      id: "guardrails",
+      title: "Security & Guardrails",
       description:
-        "Guardrails, PII protection, access controls, and input/output filtering",
+        "Input/output filtering, PII protection, compliance, and policy enforcement",
       icon: "Shield",
       color: "from-yellow-500 to-yellow-600",
       borderColor: "border-yellow-500",
@@ -87,174 +93,77 @@ export const consoleContent = {
       textColor: "text-yellow-600",
       subCards: [
         {
-          id: "security-1",
-          title: "Content Guardrails",
+          id: "guardrails-1",
+          title: "Input Guardrails",
           content:
-            "Bedrock Guardrails filter every input and output through configurable content policies (hate, violence, misconduct, etc.) and custom denied topic policies tailored to the use case.",
+            "All user queries are scanned for harmful content, PII, and prompt injection attempts.",
           description:
-            "Prevents the agent from generating harmful content or being manipulated into off-topic responses. Policies are tunable per deployment without code changes.",
+            "Blocks malicious or unsafe input before it reaches the agent.",
         },
         {
-          id: "security-2",
-          title: "PII Protection",
+          id: "guardrails-2",
+          title: "Output Guardrails",
           content:
-            "Sensitive data types (SSN, credit cards, bank accounts, etc.) are blocked or automatically anonymized in agent responses. Configurable per PII category.",
+            "Generated responses are checked for policy violations, sensitive data leakage, and hallucination risk.",
           description:
-            "Prevents accidental exposure of personally identifiable information, even if it appears in source data. Critical for regulated industries.",
+            "Ensures the system only returns safe, compliant, and accurate answers.",
         },
         {
-          id: "security-3",
-          title: "Identity & Access Control",
-          content:
-            "AgentCore Identity manages authentication and role-based permissions. Users and service accounts are scoped to specific agents, tools, and data sources.",
-          description:
-            "Not everyone should have access to every agent or every data source. Fine-grained access control ensures the right people reach the right capabilities.",
-        },
-        {
-          id: "security-4",
+          id: "guardrails-3",
           title: "Audit Logging",
           content:
-            "Every agent invocation, tool call, and data access is logged with caller identity, timestamps, and request context through Inferdat Observe. Full trace history is retained for compliance and forensic review.",
+            "All queries, agent calls, and data accesses are logged with identity, timestamps, and context.",
           description:
-            "Regulated environments require a full audit trail. When something goes wrong, you need to know who asked what, when, and what the system did.",
+            "Provides a full trace for compliance, review, and forensic analysis.",
         },
       ],
     },
     {
-      id: "observability",
-      title: "Observability",
+      id: "query",
+      title: "User Query & RAG Retrieval",
       description:
-        "Full trace visibility — every agent call, tool use, and token",
-      icon: "Activity",
-      color: "from-emerald-500 to-emerald-600",
-      borderColor: "border-emerald-500",
-      bgColor: "bg-emerald-500/5",
-      textColor: "text-emerald-500",
+        "Multi-turn question answering with contextual retrieval from the KB",
+      icon: "MessageCircle",
+      color: "from-blue-500 to-blue-600",
+      borderColor: "border-blue-500",
+      bgColor: "bg-blue-500/5",
+      textColor: "text-blue-500",
       subCards: [
         {
-          id: "observability-1",
-          title: "Trace Visualization",
+          id: "query-1",
+          title: "Query Submission",
           content:
-            "Every agent call, tool invocation, and model interaction is automatically traced. Full nested span trees are visible in Inferdat Observe.",
+            "User submits a question via the chat UI. The system maintains context across turns using session memory.",
           description:
-            "When something goes wrong or takes too long, you see exactly which step, which tool, and which agent caused it. No guesswork.",
+            "Supports natural multi-turn conversations without losing context.",
         },
         {
-          id: "observability-2",
-          title: "Evaluation Scoring",
+          id: "query-2",
+          title: "Knowledge Retrieval",
           content:
-            "Every trace receives automatic evaluation scores — latency, error rate, completeness, tool usage effectiveness. Custom evaluators are added per use case.",
+            "Agent queries the Bedrock KB, retrieves relevant chunks using semantic search and reranking.",
           description:
-            "Quality is measured on every request, not sampled. Degradation is caught immediately, not after user complaints.",
+            "Ensures answers are based on the most relevant and accurate content.",
         },
         {
-          id: "observability-3",
-          title: "Prompt Management",
+          id: "query-3",
+          title: "Response Generation",
           content:
-            "All agent prompts are versioned and served from Inferdat Observe. Model, temperature, and other parameters are configurable per agent without code changes.",
+            "Agent generates a cited answer with guardrail checks applied to ensure safety and compliance.",
           description:
-            "Iterate on prompts, swap models, or tune parameters directly in the UI. No redeployment needed. Supports A/B testing and rollback.",
+            "Final response is accurate, safe, and compliant with enterprise policies.",
         },
         {
-          id: "observability-4",
-          title: "Human-in-the-Loop Review",
+          id: "query-4",
+          title: "Trace & Feedback",
           content:
-            "Traces are flagged for human review based on confidence thresholds, evaluation scores, or content triggers. Reviewers annotate directly in Inferdat Observe.",
+            "All query steps, retrieved chunks, and model decisions are logged and visible in the Live Trace panel.",
           description:
-            "Not every response should go unchecked. High-stakes outputs get human oversight without slowing down the majority of requests.",
+            "Enables debugging, monitoring, and continuous improvement of retrieval and response quality.",
         },
       ],
     },
-    {
-      id: "cost",
-      title: "Cost Optimization",
-      description:
-        "Prompt caching, intelligent routing, and per-query cost tracking",
-      icon: "DollarSign",
-      color: "from-orange-500 to-orange-600",
-      borderColor: "border-orange-500",
-      bgColor: "bg-orange-500/5",
-      textColor: "text-orange-500",
-      subCards: [
-        {
-          id: "cost-1",
-          title: "Prompt Caching",
-          content:
-            "Bedrock prompt caching stores frequently used context (system prompts, few-shot examples, large documents) so repeated calls skip redundant input processing.",
-          description:
-            "Reduces cost by up to 90% and latency by up to 85% for prompts with shared prefixes. High-volume agents benefit immediately.",
-        },
-        {
-          id: "cost-2",
-          title: "Intelligent Prompt Routing",
-          content:
-            "Bedrock Intelligent Prompt Routing evaluates each request and routes it to the most cost-effective model in a family that can handle the complexity.",
-          description:
-            "Simple questions don't need the most expensive model. Automatic routing reduces cost by up to 30% with no quality loss on straightforward tasks.",
-        },
-        {
-          id: "cost-3",
-          title: "Cost Tracking per Query",
-          content:
-            "Inferdat Observe captures token usage and model pricing per trace. Cost is attributed to each agent, tool call, and session for full visibility.",
-          description:
-            "You can't optimize what you can't measure. Per-query cost attribution reveals which agents, tools, or user patterns drive spend.",
-        },
-        {
-          id: "cost-4",
-          title: "Budget Controls",
-          content:
-            "Configurable spend limits per agent, per user, or per time window. Alerts fire before limits are hit; hard caps prevent runaway costs.",
-          description:
-            "Production AI without budget guardrails is a billing surprise waiting to happen. Proactive controls keep costs predictable.",
-        },
-      ],
-    },
-    {
-      id: "runtime",
-      title: "Runtime",
-      description: "Serverless deployment, CI/CD, and infrastructure as code",
-      icon: "Zap",
-      color: "from-pink-500 to-pink-600",
-      borderColor: "border-pink-500",
-      bgColor: "bg-pink-500/5",
-      textColor: "text-pink-500",
-      subCards: [
-        {
-          id: "runtime-1",
-          title: "Serverless Execution",
-          content:
-            "Agents run on AgentCore Runtime with microVM isolation per session. Each request gets its own isolated execution environment with consumption-based scaling.",
-          description:
-            "No shared state between sessions, no noisy-neighbor issues, and no servers to manage or patch. Scales to zero, scales to thousands.",
-        },
-        {
-          id: "runtime-2",
-          title: "Infrastructure as Code",
-          content:
-            "The entire environment — networking, data stores, tool functions, agent resources, observability, and metrics — is defined in CDK stacks. Fully reproducible.",
-          description:
-            "Spin up a new environment for a customer POC in one command. Every resource is auditable, version-controlled, and consistent across deployments.",
-        },
-        {
-          id: "runtime-3",
-          title: "CI/CD Pipeline",
-          content:
-            "A self-mutating pipeline deploys infrastructure and agent code on every push. Agents, tools, and prompts all flow through the same promotion path.",
-          description:
-            "Changes to agent logic, tool integrations, or infrastructure go through automated build, test, and deploy. No manual steps, no drift between environments.",
-        },
-        {
-          id: "runtime-4",
-          title: "Rate Limiting & Throttling",
-          content:
-            "Configurable request rate limits per user, per agent, and per API endpoint. Protects backend systems and model endpoints from burst traffic.",
-          description:
-            "A single runaway client shouldn't exhaust model quotas or overwhelm downstream tools. Rate limits keep the system stable under load.",
-        },
-      ],
-    },
-  ] as ConsoleCard[],
+  ],
 
   chat: {
     placeholder: "Type your message here...",
