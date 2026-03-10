@@ -14,7 +14,7 @@ type MainTab = 'console' | 'health' | 'documents';
 const MAIN_TABS = [
   { id: 'console' as const, label: 'Console', icon: MessageSquare },
   { id: 'health' as const, label: 'Health Dashboard', icon: Activity },
-  { id: 'documents' as const, label: 'Knowledge Base', icon: FileText },
+  { id: 'documents' as const, label: 'Knowledge Bases', icon: FileText },
 ];
 
 export const DashboardPage = () => {
