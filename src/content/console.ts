@@ -1,92 +1,83 @@
 export const consoleContent = {
   cards: [
     {
-      id: "ingestion",
-      title: "Document Ingestion",
-      description:
-        "Upload, preprocess, and index documents into the knowledge base",
-      icon: "UploadCloud",
+      id: "knowledge-base",
+      title: "Knowledge Base",
+      description: "Managed retrieval system for enterprise documents",
+      icon: "Database",
       color: "from-purple-500 to-purple-600",
       borderColor: "border-purple-500",
       bgColor: "bg-purple-500/5",
       textColor: "text-purple-500",
       subCards: [
         {
-          id: "ingestion-1",
-          title: "Document Upload",
+          id: "kb-1",
+          title: "Semantic Search",
           content:
-            "Users upload documents to Amazon S3. Supported formats are automatically validated and rejected if unsupported.",
+            "Enterprise documents are indexed with embeddings enabling semantic retrieval instead of keyword matching.",
           description:
-            "Ensures only the right file types are ingested and triggers the ingestion pipeline.",
+            "Users can ask natural language questions and retrieve the most relevant knowledge chunks.",
         },
         {
-          id: "ingestion-2",
-          title: "Preprocessing & Chunking",
+          id: "kb-2",
+          title: "Automatic Chunking",
           content:
-            "Documents are preprocessed: headers/footers removed, formatting normalized, OCR applied if needed, and text extracted. Chunks are generated based on document type.",
+            "Documents are automatically processed and split into optimized chunks for better retrieval accuracy.",
           description:
-            "Contracts → clause chunking, FAQs → QA chunking, Guidelines → section chunking, Reports → table-aware chunking.",
+            "Ensures the most relevant sections of documents are retrieved during queries.",
         },
         {
-          id: "ingestion-3",
-          title: "Embedding Generation",
+          id: "kb-3",
+          title: "Vector Storage",
           content:
-            "Text chunks are converted into embeddings using Amazon Bedrock.",
+            "Embeddings are stored in OpenSearch Serverless enabling scalable vector search.",
           description:
-            "Embeddings are stored in Amazon OpenSearch Serverless for semantic search.",
-        },
-        {
-          id: "ingestion-4",
-          title: "Knowledge Base Indexing",
-          content:
-            "All chunks are indexed into the KB. Partial indexing triggers retry logic.",
-          description:
-            "Ensures the KB is ready for retrieval with all ingested content.",
+            "Supports large enterprise document sets with fast retrieval performance.",
         },
       ],
     },
+
     {
-      id: "failure",
-      title: "Failure Handling & Retry",
-      description: "Ensure resilience and reliable responses across the system",
-      icon: "AlertTriangle",
-      color: "from-red-500 to-red-600",
-      borderColor: "border-red-500",
-      bgColor: "bg-red-500/5",
-      textColor: "text-red-500",
+      id: "agent",
+      title: "Bedrock Agent",
+      description: "Conversational orchestration layer for enterprise Q&A",
+      icon: "Bot",
+      color: "from-blue-500 to-blue-600",
+      borderColor: "border-blue-500",
+      bgColor: "bg-blue-500/5",
+      textColor: "text-blue-500",
       subCards: [
         {
-          id: "failure-1",
-          title: "Agent/API Throttling",
+          id: "agent-1",
+          title: "Multi-Turn Conversations",
           content:
-            "Bedrock API calls monitor throttling events and retry automatically with exponential backoff.",
+            "The assistant supports contextual conversations allowing users to ask follow-up questions naturally.",
           description:
-            "Prevents request failures due to rate limits and ensures consistent system behavior.",
+            "Session memory ensures continuity across multiple questions.",
         },
         {
-          id: "failure-2",
-          title: "Search & Retrieval Errors",
+          id: "agent-2",
+          title: "Retrieval-Augmented Generation",
           content:
-            "OpenSearch or KB retrieval failures trigger automatic retries and alert logging.",
-          description:
-            "Guarantees that temporary search issues do not break the user experience.",
+            "Responses are generated using relevant knowledge base content retrieved at query time.",
+          description: "Ensures answers are grounded in enterprise documents.",
         },
         {
-          id: "failure-3",
-          title: "Fallback Models",
+          id: "agent-3",
+          title: "Cited Responses",
           content:
-            "Primary model errors or unavailability automatically route queries to backup models.",
+            "Answers include references to the exact document sections used to generate the response.",
           description:
-            "Maintains high availability and ensures the user always gets a response.",
+            "Improves transparency and user trust in generated answers.",
         },
       ],
     },
+
     {
       id: "guardrails",
       title: "Security & Guardrails",
-      description:
-        "Input/output filtering, PII protection, compliance, and policy enforcement",
-      icon: "Shield",
+      description: "Enterprise protection layer for safe AI responses",
+      icon: "ShieldCheck",
       color: "from-yellow-500 to-yellow-600",
       borderColor: "border-yellow-500",
       bgColor: "bg-yellow-500/5",
@@ -94,84 +85,105 @@ export const consoleContent = {
       subCards: [
         {
           id: "guardrails-1",
-          title: "Input Guardrails",
+          title: "Content Filtering",
           content:
-            "All user queries are scanned for harmful content, PII, and prompt injection attempts.",
-          description:
-            "Blocks malicious or unsafe input before it reaches the agent.",
+            "User queries and model outputs are filtered against configurable safety policies.",
+          description: "Prevents harmful or inappropriate responses.",
         },
         {
           id: "guardrails-2",
-          title: "Output Guardrails",
+          title: "PII Protection",
           content:
-            "Generated responses are checked for policy violations, sensitive data leakage, and hallucination risk.",
+            "Sensitive information such as personal identifiers is automatically detected and redacted.",
           description:
-            "Ensures the system only returns safe, compliant, and accurate answers.",
+            "Ensures privacy and compliance with enterprise data policies.",
         },
         {
           id: "guardrails-3",
-          title: "Audit Logging",
+          title: "Hallucination Protection",
           content:
-            "All queries, agent calls, and data accesses are logged with identity, timestamps, and context.",
-          description:
-            "Provides a full trace for compliance, review, and forensic analysis.",
+            "Responses are validated against retrieved knowledge to reduce unsupported claims.",
+          description: "Ensures answers stay grounded in real enterprise data.",
         },
       ],
     },
+
     {
-      id: "query",
-      title: "User Query & RAG Retrieval",
-      description:
-        "Multi-turn question answering with contextual retrieval from the KB",
-      icon: "MessageCircle",
-      color: "from-blue-500 to-blue-600",
-      borderColor: "border-blue-500",
-      bgColor: "bg-blue-500/5",
-      textColor: "text-blue-500",
+      id: "document-management",
+      title: "Document Management",
+      description: "Tools for managing enterprise knowledge sources",
+      icon: "FileText",
+      color: "from-emerald-500 to-emerald-600",
+      borderColor: "border-emerald-500",
+      bgColor: "bg-emerald-500/5",
+      textColor: "text-emerald-500",
       subCards: [
         {
-          id: "query-1",
-          title: "Query Submission",
+          id: "doc-1",
+          title: "Document Upload",
           content:
-            "User submits a question via the chat UI. The system maintains context across turns using session memory.",
-          description:
-            "Supports natural multi-turn conversations without losing context.",
+            "Upload PDFs, Word documents, and other supported formats directly to the knowledge base.",
+          description: "Supports quick onboarding of enterprise documentation.",
         },
         {
-          id: "query-2",
-          title: "Knowledge Retrieval",
+          id: "doc-2",
+          title: "Automated Indexing",
           content:
-            "Agent queries the Bedrock KB, retrieves relevant chunks using semantic search and reranking.",
-          description:
-            "Ensures answers are based on the most relevant and accurate content.",
+            "Uploaded documents are automatically processed and indexed.",
+          description: "No manual preprocessing required.",
         },
         {
-          id: "query-3",
-          title: "Response Generation",
+          id: "doc-3",
+          title: "Source Citations",
+          content: "Responses always reference the original document source.",
+          description: "Helps users verify information quickly.",
+        },
+      ],
+    },
+
+    {
+      id: "observability",
+      title: "Observability & Trace",
+      description: "Visibility into system decisions and query processing",
+      icon: "Activity",
+      color: "from-orange-500 to-orange-600",
+      borderColor: "border-orange-500",
+      bgColor: "bg-orange-500/5",
+      textColor: "text-orange-500",
+      subCards: [
+        {
+          id: "obs-1",
+          title: "Live Trace",
           content:
-            "Agent generates a cited answer with guardrail checks applied to ensure safety and compliance.",
-          description:
-            "Final response is accurate, safe, and compliant with enterprise policies.",
+            "Each query displays a trace of retrieval, reasoning, and guardrail checks.",
+          description: "Provides transparency into how answers are generated.",
         },
         {
-          id: "query-4",
-          title: "Trace & Feedback",
+          id: "obs-2",
+          title: "Query Logging",
           content:
-            "All query steps, retrieved chunks, and model decisions are logged and visible in the Live Trace panel.",
+            "All interactions are logged with timestamps and processing steps.",
+          description: "Enables auditing and system debugging.",
+        },
+        {
+          id: "obs-3",
+          title: "Performance Monitoring",
+          content:
+            "Track query performance, retrieval accuracy, and system activity.",
           description:
-            "Enables debugging, monitoring, and continuous improvement of retrieval and response quality.",
+            "Helps optimize system behavior and improve response quality.",
         },
       ],
     },
   ],
 
   chat: {
-    placeholder: "Type your message here...",
-    emptyState: "Start a conversation to see responses here",
+    placeholder: "Ask a question about your documents...",
+    emptyState: "Start a conversation to interact with the knowledge assistant",
   },
 
   trace: {
     title: "Live Trace",
-    emptyState: "Trace events will appear here when you send a message",
+    emptyState: "Processing details will appear here when a query is executed",
   },
 };

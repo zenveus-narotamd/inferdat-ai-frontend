@@ -1,203 +1,343 @@
 'use client';
 
-import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { TrendingUp, AlertCircle, CheckCircle, Activity, Calendar } from 'lucide-react';
-import { StatusBadge } from '@/components/health/StatusBadge';
-import { MetricsCard } from '@/components/health/MetricsCard';
-import { ServiceCard } from '@/components/health/ServiceCard';
-import { IncidentCard } from '@/components/health/IncidentCard';
-import { MaintenanceCard } from '@/components/health/MaintenanceCard';
-import { cn } from '@/lib/utils';
+import { 
+  MessageSquare, 
+  TrendingUp, 
+  CheckCircle, 
+  Clock,
+  Database,
+  Bot,
+  ShieldCheck,
+  FileStack,
+  BarChart3,
+  FileText
+} from 'lucide-react';
+import { QuickMetricCard } from '@/components/health/QuickMetricCard';
+import { SystemHealthCard } from '@/components/health/SystemHealthCard';
+import { GuardrailEventCard } from '@/components/health/GuardrailEventCard';
+import { DocumentTable } from '@/components/health/DocumentTable';
 import {
-  healthContent,
-  mockMetrics,
-  mockServices,
-  mockActiveIncidents,
-  mockResolvedIncidents,
-  mockScheduledMaintenance,
-} from '@/content/health';
-
-type HealthSubTab = 'overview' | 'activeIssues' | 'scheduled' | 'history';
+  opsContent,
+  mockSystemMetrics,
+  mockComponents,
+  mockTopQuestions,
+  mockRecentDocuments,
+  mockGuardrailEvents,
+  mockReferencedDocuments,
+} from '@/content/ops';
 
 export const HealthTab = () => {
-  const [activeSubTab, setActiveSubTab] = useState<HealthSubTab>('overview');
-
   return (
-    <div>
+    <div className="h-full overflow-y-auto">
       {/* Header Section */}
       <div className="bg-background-secondary border-b border-border">
-        <div className="max-w-content mx-auto px-6 lg:px-16 py-12">
+        <div className="max-w-content mx-auto px-6 lg:px-16 py-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
           >
-            <h1 className="heading-1 text-text-primary mb-3">
-              {healthContent.title}
+            <h1 className="text-3xl font-semibold text-text-primary mb-2">
+              {opsContent.title}
             </h1>
-            <p className="text-body-lg text-text-secondary mb-6">
-              {healthContent.subtitle}
+            <p className="text-base text-text-secondary">
+              {opsContent.subtitle}
             </p>
-            <StatusBadge status={mockMetrics.overallStatus} size="lg" />
           </motion.div>
         </div>
       </div>
 
       {/* Content Section */}
-      <div className="max-w-content mx-auto px-6 lg:px-16 py-12">
-        {/* Metrics Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-          <MetricsCard
-            title="Average Uptime"
-            value={`${mockMetrics.averageUptime}%`}
-            icon={TrendingUp}
-            trend="up"
-            trendValue="+0.02% from last month"
-            color="emerald"
-          />
-          <MetricsCard
-            title="Active Incidents"
-            value={mockMetrics.activeIncidents}
-            icon={AlertCircle}
-            color="amber"
-          />
-          <MetricsCard
-            title="Operational Services"
-            value={`${mockMetrics.operationalServices}/${mockMetrics.totalServices}`}
-            icon={CheckCircle}
-            color="emerald"
-          />
-          <MetricsCard
-            title="Total Services"
-            value={mockMetrics.totalServices}
-            icon={Activity}
-            color="purple"
-          />
-        </div>
+      <div className="max-w-content mx-auto px-6 lg:px-16 py-8 space-y-10">
+        
+        {/* Section 1: System Health Overview */}
+        <section>
+          <h2 className="text-xl font-semibold text-text-primary mb-4">System Health Overview</h2>
+          
+          {/* Component Status Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <SystemHealthCard
+              name={mockComponents[0].name}
+              status={mockComponents[0].status}
+              uptime={mockComponents[0].uptime}
+              icon={Bot}
+              index={0}
+            />
+            <SystemHealthCard
+              name={mockComponents[1].name}
+              status={mockComponents[1].status}
+              uptime={mockComponents[1].uptime}
+              icon={Database}
+              index={1}
+            />
+            <SystemHealthCard
+              name={mockComponents[2].name}
+              status={mockComponents[2].status}
+              uptime={mockComponents[2].uptime}
+              icon={ShieldCheck}
+              index={2}
+            />
+            <SystemHealthCard
+              name={mockComponents[3].name}
+              status={mockComponents[3].status}
+              uptime={mockComponents[3].uptime}
+              icon={FileStack}
+              index={3}
+            />
+          </div>
 
-        {/* Sub-tabs */}
-        <div className="mb-8">
-          <div className="border-b border-border">
-            <div className="flex gap-8">
-              {(Object.keys(healthContent.tabs) as HealthSubTab[]).map((tab) => (
-                <button
-                  key={tab}
-                  onClick={() => setActiveSubTab(tab)}
-                  className={cn(
-                    'pb-4 text-body font-medium transition-colors relative',
-                    activeSubTab === tab
-                      ? 'text-purple-primary'
-                      : 'text-text-secondary hover:text-text-primary'
-                  )}
-                >
-                  {healthContent.tabs[tab]}
-                  {activeSubTab === tab && (
-                    <motion.div
-                      layoutId="activeHealthSubTab"
-                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-purple-primary"
-                      transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                    />
-                  )}
-                </button>
+          {/* Quick Metrics */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <QuickMetricCard
+              label="Active Conversations"
+              value={mockSystemMetrics.activeConversations}
+              icon={MessageSquare}
+              color="purple"
+              index={0}
+            />
+            <QuickMetricCard
+              label="Total Queries"
+              value={mockSystemMetrics.totalQueries.toLocaleString()}
+              icon={BarChart3}
+              color="sky"
+              index={1}
+            />
+            <QuickMetricCard
+              label="Success Rate"
+              value={`${mockSystemMetrics.successRate}%`}
+              icon={CheckCircle}
+              color="emerald"
+              index={2}
+            />
+            <QuickMetricCard
+              label="Avg Response Time"
+              value={`${mockSystemMetrics.avgResponseTime}s`}
+              icon={Clock}
+              color="amber"
+              index={3}
+            />
+          </div>
+        </section>
+
+        {/* Section 2: Query & Usage Metrics */}
+        <section>
+          <h2 className="text-xl font-semibold text-text-primary mb-4">Query & Usage Metrics</h2>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Top Questions */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              className="bg-white border border-border rounded-xl p-5"
+            >
+              <h3 className="text-sm font-semibold text-text-primary mb-4">Top Questions</h3>
+              <div className="space-y-3">
+                {mockTopQuestions.map((q, index) => (
+                  <div key={index} className="pb-3 border-b border-border last:border-0 last:pb-0">
+                    <p className="text-sm text-text-primary mb-1.5">{q.question}</p>
+                    <div className="flex items-center gap-4 text-xs text-text-tertiary">
+                      <span>{q.count} queries</span>
+                      <span>•</span>
+                      <span>{q.avgResponseTime}s avg</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+
+            {/* Performance Metrics */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.05, ease: [0.16, 1, 0.3, 1] }}
+              className="bg-white border border-border rounded-xl p-5"
+            >
+              <h3 className="text-sm font-semibold text-text-primary mb-4">Performance Overview</h3>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-text-secondary">Query Success Rate</span>
+                  <span className="text-sm font-semibold text-emerald-500">
+                    {mockSystemMetrics.successRate}%
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-text-secondary">Avg Response Latency</span>
+                  <span className="text-sm font-semibold text-text-primary">
+                    {mockSystemMetrics.avgResponseTime}s
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-text-secondary">Total Queries (24h)</span>
+                  <span className="text-sm font-semibold text-text-primary">
+                    {mockSystemMetrics.totalQueries.toLocaleString()}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-text-secondary">Active Sessions</span>
+                  <span className="text-sm font-semibold text-text-primary">
+                    {mockSystemMetrics.activeConversations}
+                  </span>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* Section 3: Knowledge Base Health */}
+        <section>
+          <h2 className="text-xl font-semibold text-text-primary mb-4">Knowledge Base Health</h2>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 mb-6">
+            <QuickMetricCard
+              label="Total Documents"
+              value={mockSystemMetrics.totalDocuments}
+              icon={FileText}
+              color="purple"
+              index={0}
+            />
+            <QuickMetricCard
+              label="Processing"
+              value={mockSystemMetrics.documentsProcessing}
+              icon={Clock}
+              color="amber"
+              index={1}
+            />
+            <QuickMetricCard
+              label="Failed Ingestions"
+              value={mockSystemMetrics.failedIngestions}
+              icon={TrendingUp}
+              color="sky"
+              index={2}
+            />
+            <QuickMetricCard
+              label="KB Hit Rate"
+              value={`${mockSystemMetrics.kbHitRate}%`}
+              icon={CheckCircle}
+              color="emerald"
+              index={3}
+            />
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <h3 className="text-sm font-semibold text-text-primary mb-3">Recent Documents</h3>
+            <DocumentTable documents={mockRecentDocuments} />
+          </motion.div>
+        </section>
+
+        {/* Section 4: Guardrails & Safety */}
+        <section>
+          <h2 className="text-xl font-semibold text-text-primary mb-4">Guardrails & Safety</h2>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
+            <QuickMetricCard
+              label="Blocked Queries"
+              value={mockSystemMetrics.blockedQueries}
+              icon={ShieldCheck}
+              color="amber"
+              index={0}
+            />
+            <QuickMetricCard
+              label="PII Redactions"
+              value={mockSystemMetrics.piiRedactions}
+              icon={ShieldCheck}
+              color="sky"
+              index={1}
+            />
+            <QuickMetricCard
+              label="Total Events (24h)"
+              value={mockGuardrailEvents.length}
+              icon={BarChart3}
+              color="purple"
+              index={2}
+            />
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <h3 className="text-sm font-semibold text-text-primary mb-3">Recent Events</h3>
+            <div className="space-y-2">
+              {mockGuardrailEvents.map((event, index) => (
+                <GuardrailEventCard key={event.id} event={event} index={index} />
               ))}
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </section>
 
-        {/* Sub-tab Content */}
-        <motion.div
-          key={activeSubTab}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-        >
-          {activeSubTab === 'overview' && (
-            <div>
-              <h2 className="heading-3 text-text-primary mb-6">All Services</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {mockServices.map((service, index) => (
-                  <ServiceCard key={service.id} service={service} index={index} />
-                ))}
-              </div>
-            </div>
-          )}
-
-          {activeSubTab === 'activeIssues' && (
-            <div>
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="heading-3 text-text-primary">Active Issues</h2>
-                <span className="text-body-sm text-text-secondary">
-                  {mockActiveIncidents.length} active incident
-                  {mockActiveIncidents.length !== 1 ? 's' : ''}
-                </span>
-              </div>
-              {mockActiveIncidents.length === 0 ? (
-                <div className="bg-background-secondary border border-border rounded-2xl p-12 text-center">
-                  <CheckCircle className="w-12 h-12 text-emerald-500 mx-auto mb-4" />
-                  <h3 className="text-h4 font-semibold text-text-primary mb-2">
-                    All Systems Operational
-                  </h3>
-                  <p className="text-body text-text-secondary">
-                    No active incidents at this time.
-                  </p>
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  {mockActiveIncidents.map((incident, index) => (
-                    <IncidentCard key={incident.id} incident={incident} index={index} />
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
-
-          {activeSubTab === 'scheduled' && (
-            <div>
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="heading-3 text-text-primary">Scheduled Maintenance</h2>
-                <span className="text-body-sm text-text-secondary">
-                  {mockScheduledMaintenance.length} upcoming
-                </span>
-              </div>
-              {mockScheduledMaintenance.length === 0 ? (
-                <div className="bg-background-secondary border border-border rounded-2xl p-12 text-center">
-                  <Calendar className="w-12 h-12 text-text-tertiary mx-auto mb-4" />
-                  <h3 className="text-h4 font-semibold text-text-primary mb-2">
-                    No Scheduled Maintenance
-                  </h3>
-                  <p className="text-body text-text-secondary">
-                    There are no maintenance windows scheduled at this time.
-                  </p>
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  {mockScheduledMaintenance.map((maintenance, index) => (
-                    <MaintenanceCard
-                      key={maintenance.id}
-                      maintenance={maintenance}
-                      index={index}
-                    />
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
-
-          {activeSubTab === 'history' && (
-            <div>
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="heading-3 text-text-primary">Incident History</h2>
-                <span className="text-body-sm text-text-secondary">Last 30 days</span>
-              </div>
+        {/* Section 5: Retrieval & AI Performance */}
+        <section>
+          <h2 className="text-xl font-semibold text-text-primary mb-4">Retrieval & AI Performance</h2>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Performance Metrics */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              className="bg-white border border-border rounded-xl p-5"
+            >
+              <h3 className="text-sm font-semibold text-text-primary mb-4">Latency Metrics</h3>
               <div className="space-y-4">
-                {mockResolvedIncidents.map((incident, index) => (
-                  <IncidentCard key={incident.id} incident={incident} index={index} />
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-text-secondary">Retrieval Latency</span>
+                  <span className="text-sm font-semibold text-text-primary">
+                    {mockSystemMetrics.retrievalLatency}s
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-text-secondary">Model Response Latency</span>
+                  <span className="text-sm font-semibold text-text-primary">
+                    {mockSystemMetrics.modelLatency}s
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-text-secondary">Total Response Time</span>
+                  <span className="text-sm font-semibold text-text-primary">
+                    {mockSystemMetrics.avgResponseTime}s
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-text-secondary">Knowledge Base Hit Rate</span>
+                  <span className="text-sm font-semibold text-emerald-500">
+                    {mockSystemMetrics.kbHitRate}%
+                  </span>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Most Referenced Documents */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.05, ease: [0.16, 1, 0.3, 1] }}
+              className="bg-white border border-border rounded-xl p-5"
+            >
+              <h3 className="text-sm font-semibold text-text-primary mb-4">Most Referenced Documents</h3>
+              <div className="space-y-3">
+                {mockReferencedDocuments.map((doc, index) => (
+                  <div key={index} className="flex items-center justify-between pb-3 border-b border-border last:border-0 last:pb-0">
+                    <div className="flex items-center gap-2 flex-1 min-w-0">
+                      <FileText className="w-4 h-4 text-text-tertiary shrink-0" />
+                      <span className="text-sm text-text-primary truncate">{doc.name}</span>
+                    </div>
+                    <span className="text-sm font-semibold text-purple-primary shrink-0 ml-2">
+                      {doc.references}
+                    </span>
+                  </div>
                 ))}
               </div>
-            </div>
-          )}
-        </motion.div>
+            </motion.div>
+          </div>
+        </section>
+
       </div>
     </div>
   );

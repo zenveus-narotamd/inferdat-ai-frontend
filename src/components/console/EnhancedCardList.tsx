@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronRight, X, UploadCloud, AlertTriangle, Shield, MessageCircle } from 'lucide-react';
+import { ChevronRight, X, Database, Bot, ShieldCheck, FileText, Activity } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { ConsoleCard } from '@/types/console';
 
@@ -11,10 +11,11 @@ interface EnhancedCardListProps {
 }
 
 const iconMap = {
-  UploadCloud,
-  AlertTriangle,
-  Shield,
-  MessageCircle,
+  Database,
+  Bot,
+  ShieldCheck,
+  FileText,
+  Activity,
 };
 
 // Refined accent colors per layer
@@ -26,7 +27,7 @@ const layerAccent: Record<string, {
   tag: string;
   arrow: string;
 }> = {
-  ingestion: {
+  'knowledge-base': {
     border: 'border-purple-primary/30',
     bg: 'bg-purple-primary/[0.06]',
     iconBg: 'bg-purple-primary/15',
@@ -34,13 +35,13 @@ const layerAccent: Record<string, {
     tag: 'text-purple-light bg-purple-primary/10 border-purple-primary/20',
     arrow: 'text-purple-light',
   },
-  failure: {
-    border: 'border-red-400/30',
-    bg: 'bg-red-400/[0.06]',
-    iconBg: 'bg-red-400/15',
-    iconText: 'text-red-300',
-    tag: 'text-red-300 bg-red-400/10 border-red-400/20',
-    arrow: 'text-red-300',
+  agent: {
+    border: 'border-sky-400/30',
+    bg: 'bg-sky-400/[0.06]',
+    iconBg: 'bg-sky-400/15',
+    iconText: 'text-sky-300',
+    tag: 'text-sky-300 bg-sky-400/10 border-sky-400/20',
+    arrow: 'text-sky-300',
   },
   guardrails: {
     border: 'border-amber-400/30',
@@ -50,13 +51,21 @@ const layerAccent: Record<string, {
     tag: 'text-amber-300 bg-amber-400/10 border-amber-400/20',
     arrow: 'text-amber-300',
   },
-  query: {
-    border: 'border-sky-400/30',
-    bg: 'bg-sky-400/[0.06]',
-    iconBg: 'bg-sky-400/15',
-    iconText: 'text-sky-300',
-    tag: 'text-sky-300 bg-sky-400/10 border-sky-400/20',
-    arrow: 'text-sky-300',
+  'document-management': {
+    border: 'border-emerald-400/30',
+    bg: 'bg-emerald-400/[0.06]',
+    iconBg: 'bg-emerald-400/15',
+    iconText: 'text-emerald-300',
+    tag: 'text-emerald-300 bg-emerald-400/10 border-emerald-400/20',
+    arrow: 'text-emerald-300',
+  },
+  observability: {
+    border: 'border-orange-400/30',
+    bg: 'bg-orange-400/[0.06]',
+    iconBg: 'bg-orange-400/15',
+    iconText: 'text-orange-300',
+    tag: 'text-orange-300 bg-orange-400/10 border-orange-400/20',
+    arrow: 'text-orange-300',
   },
 };
 
@@ -84,7 +93,7 @@ export const EnhancedCardList = ({ cards }: EnhancedCardListProps) => {
     <div className="relative h-full overflow-y-auto px-4 py-6">
       <div className="space-y-2">
         {cards.map((card, index) => {
-          const Icon = iconMap[card.icon as keyof typeof iconMap] || UploadCloud;
+          const Icon = iconMap[card.icon as keyof typeof iconMap] || Database;
           const isActive = selectedCard?.id === card.id;
           const accent = layerAccent[card.id];
           
@@ -176,7 +185,7 @@ export const EnhancedCardList = ({ cards }: EnhancedCardListProps) => {
                     layerAccent[selectedCard.id].iconBg
                   )}>
                     {(() => {
-                      const Icon = iconMap[selectedCard.icon as keyof typeof iconMap] || UploadCloud;
+                      const Icon = iconMap[selectedCard.icon as keyof typeof iconMap] || Database;
                       return <Icon className={cn('w-4.5 h-4.5', layerAccent[selectedCard.id].iconText)} />;
                     })()}
                   </div>
