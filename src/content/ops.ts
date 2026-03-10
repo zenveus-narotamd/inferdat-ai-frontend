@@ -4,10 +4,11 @@ import type {
   Document,
   GuardrailEvent,
   SystemMetrics,
+  Issue,
 } from "@/types/ops";
 
 export const opsContent = {
-  title: "Health Dashboard",
+  title: "Operations Dashboard",
   subtitle: "Monitor AI assistant performance and system health",
 };
 
@@ -25,6 +26,9 @@ export const mockSystemMetrics: SystemMetrics = {
   retrievalLatency: 0.3,
   modelLatency: 0.9,
   kbHitRate: 94.2,
+  openIssues: 5,
+  inProgressIssues: 3,
+  resolvedIssues: 28,
 };
 
 // Mock system components
@@ -175,4 +179,100 @@ export const mockReferencedDocuments = [
   { name: "Compliance_Guidelines.pdf", references: 98 },
   { name: "IT_Infrastructure_Overview.pdf", references: 87 },
   { name: "Benefits_Package_2024.pdf", references: 76 },
+];
+
+// Mock issues
+export const mockIssues: Issue[] = [
+  {
+    id: "issue-1",
+    type: "guardrail_failure",
+    title: "Guardrail failed to block inappropriate content",
+    description:
+      "Content filter did not catch offensive language in user query",
+    status: "open",
+    severity: "high",
+    createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000),
+    updatedAt: new Date(Date.now() - 2 * 60 * 60 * 1000),
+    affectedComponent: "Guardrails",
+  },
+  {
+    id: "issue-2",
+    type: "profanity_detected",
+    title: "Profanity check bypass detected",
+    description:
+      "User found a way to bypass profanity filter using special characters",
+    status: "in_progress",
+    severity: "medium",
+    createdAt: new Date(Date.now() - 5 * 60 * 60 * 1000),
+    updatedAt: new Date(Date.now() - 30 * 60 * 1000),
+    affectedComponent: "Guardrails",
+  },
+  {
+    id: "issue-3",
+    type: "pii_leak",
+    title: "PII redaction incomplete",
+    description: "Phone number format not recognized by PII detector",
+    status: "in_progress",
+    severity: "critical",
+    createdAt: new Date(Date.now() - 8 * 60 * 60 * 1000),
+    updatedAt: new Date(Date.now() - 1 * 60 * 60 * 1000),
+    affectedComponent: "Guardrails",
+  },
+  {
+    id: "issue-4",
+    type: "retrieval_error",
+    title: "Knowledge base retrieval timeout",
+    description:
+      "OpenSearch query exceeded timeout threshold for complex queries",
+    status: "open",
+    severity: "medium",
+    createdAt: new Date(Date.now() - 12 * 60 * 60 * 1000),
+    updatedAt: new Date(Date.now() - 12 * 60 * 60 * 1000),
+    affectedComponent: "Knowledge Base",
+  },
+  {
+    id: "issue-5",
+    type: "model_timeout",
+    title: "Bedrock model response timeout",
+    description:
+      "Model took longer than 30s to respond for complex reasoning tasks",
+    status: "open",
+    severity: "low",
+    createdAt: new Date(Date.now() - 18 * 60 * 60 * 1000),
+    updatedAt: new Date(Date.now() - 18 * 60 * 60 * 1000),
+    affectedComponent: "Bedrock Agent",
+  },
+  {
+    id: "issue-6",
+    type: "ingestion_failure",
+    title: "Document chunking failed for large PDF",
+    description: "PDF with 500+ pages failed during preprocessing step",
+    status: "in_progress",
+    severity: "medium",
+    createdAt: new Date(Date.now() - 24 * 60 * 60 * 1000),
+    updatedAt: new Date(Date.now() - 6 * 60 * 60 * 1000),
+    affectedComponent: "Document Pipeline",
+  },
+  {
+    id: "issue-7",
+    type: "policy_violation",
+    title: "Response contained restricted information",
+    description: "Agent provided salary information that should be restricted",
+    status: "open",
+    severity: "high",
+    createdAt: new Date(Date.now() - 36 * 60 * 60 * 1000),
+    updatedAt: new Date(Date.now() - 36 * 60 * 60 * 1000),
+    affectedComponent: "Bedrock Agent",
+  },
+  {
+    id: "issue-8",
+    type: "guardrail_failure",
+    title: "Hallucination detection missed false claim",
+    description: "Agent made unsupported claim not caught by grounding check",
+    status: "open",
+    severity: "medium",
+    createdAt: new Date(Date.now() - 48 * 60 * 60 * 1000),
+    updatedAt: new Date(Date.now() - 48 * 60 * 60 * 1000),
+    affectedComponent: "Guardrails",
+  },
 ];

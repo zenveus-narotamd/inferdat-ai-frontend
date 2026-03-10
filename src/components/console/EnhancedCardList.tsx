@@ -1,10 +1,18 @@
-'use client';
+"use client";
 
-import { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronRight, X, Database, Bot, ShieldCheck, FileText, Activity } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import type { ConsoleCard } from '@/types/console';
+import { useState, useRef, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  ChevronRight,
+  X,
+  Database,
+  Bot,
+  ShieldCheck,
+  FileText,
+  Activity,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+import type { ConsoleCard } from "@/types/console";
 
 interface EnhancedCardListProps {
   cards: ConsoleCard[];
@@ -19,53 +27,62 @@ const iconMap = {
 };
 
 // Refined accent colors per layer
-const layerAccent: Record<string, {
-  border: string;
-  bg: string;
-  iconBg: string;
-  iconText: string;
-  tag: string;
-  arrow: string;
-}> = {
-  'knowledge-base': {
-    border: 'border-purple-primary/30',
-    bg: 'bg-purple-primary/[0.06]',
-    iconBg: 'bg-purple-primary/15',
-    iconText: 'text-purple-light',
-    tag: 'text-purple-light bg-purple-primary/10 border-purple-primary/20',
-    arrow: 'text-purple-light',
+const layerAccent: Record<
+  string,
+  {
+    border: string;
+    bg: string;
+    iconBg: string;
+    iconText: string;
+    tag: string;
+    arrow: string;
+    darkSubCardBg: string;
+  }
+> = {
+  "knowledge-base": {
+    border: "border-purple-primary/30",
+    bg: "bg-purple-primary/[0.06]",
+    iconBg: "bg-purple-primary/15",
+    iconText: "text-purple-light",
+    tag: "text-purple-light bg-purple-primary/10 border-purple-primary/20",
+    arrow: "text-purple-light",
+    darkSubCardBg: "bg-purple-500/10 border-purple-500/20",
   },
   agent: {
-    border: 'border-sky-400/30',
-    bg: 'bg-sky-400/[0.06]',
-    iconBg: 'bg-sky-400/15',
-    iconText: 'text-sky-300',
-    tag: 'text-sky-300 bg-sky-400/10 border-sky-400/20',
-    arrow: 'text-sky-300',
+    border: "border-sky-400/30",
+    bg: "bg-sky-400/[0.06]",
+    iconBg: "bg-sky-400/15",
+    iconText: "text-sky-300",
+    tag: "text-sky-300 bg-sky-400/10 border-sky-400/20",
+    arrow: "text-sky-300",
+    darkSubCardBg: "bg-sky-500/10 border-sky-500/20",
   },
   guardrails: {
-    border: 'border-amber-400/30',
-    bg: 'bg-amber-400/[0.06]',
-    iconBg: 'bg-amber-400/15',
-    iconText: 'text-amber-300',
-    tag: 'text-amber-300 bg-amber-400/10 border-amber-400/20',
-    arrow: 'text-amber-300',
+    border: "border-amber-400/30",
+    bg: "bg-amber-400/[0.06]",
+    iconBg: "bg-amber-400/15",
+    iconText: "text-amber-300",
+    tag: "text-amber-300 bg-amber-400/10 border-amber-400/20",
+    arrow: "text-amber-300",
+    darkSubCardBg: "bg-amber-500/10 border-amber-500/20",
   },
-  'document-management': {
-    border: 'border-emerald-400/30',
-    bg: 'bg-emerald-400/[0.06]',
-    iconBg: 'bg-emerald-400/15',
-    iconText: 'text-emerald-300',
-    tag: 'text-emerald-300 bg-emerald-400/10 border-emerald-400/20',
-    arrow: 'text-emerald-300',
+  "document-management": {
+    border: "border-emerald-400/30",
+    bg: "bg-emerald-400/[0.06]",
+    iconBg: "bg-emerald-400/15",
+    iconText: "text-emerald-300",
+    tag: "text-emerald-300 bg-emerald-400/10 border-emerald-400/20",
+    arrow: "text-emerald-300",
+    darkSubCardBg: "bg-emerald-500/10 border-emerald-500/20",
   },
   observability: {
-    border: 'border-orange-400/30',
-    bg: 'bg-orange-400/[0.06]',
-    iconBg: 'bg-orange-400/15',
-    iconText: 'text-orange-300',
-    tag: 'text-orange-300 bg-orange-400/10 border-orange-400/20',
-    arrow: 'text-orange-300',
+    border: "border-orange-400/30",
+    bg: "bg-orange-400/[0.06]",
+    iconBg: "bg-orange-400/15",
+    iconText: "text-orange-300",
+    tag: "text-orange-300 bg-orange-400/10 border-orange-400/20",
+    arrow: "text-orange-300",
+    darkSubCardBg: "bg-orange-500/10 border-orange-500/20",
   },
 };
 
@@ -75,17 +92,20 @@ export const EnhancedCardList = ({ cards }: EnhancedCardListProps) => {
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (overlayRef.current && !overlayRef.current.contains(event.target as Node)) {
+      if (
+        overlayRef.current &&
+        !overlayRef.current.contains(event.target as Node)
+      ) {
         setSelectedCard(null);
       }
     };
 
     if (selectedCard) {
-      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener("mousedown", handleClickOutside);
     }
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [selectedCard]);
 
@@ -96,7 +116,7 @@ export const EnhancedCardList = ({ cards }: EnhancedCardListProps) => {
           const Icon = iconMap[card.icon as keyof typeof iconMap] || Database;
           const isActive = selectedCard?.id === card.id;
           const accent = layerAccent[card.id];
-          
+
           return (
             <motion.div
               key={card.id}
@@ -111,18 +131,20 @@ export const EnhancedCardList = ({ cards }: EnhancedCardListProps) => {
               <button
                 onClick={() => setSelectedCard(card)}
                 className={cn(
-                  'w-full text-left flex items-start gap-3 p-3 rounded-xl border transition-all duration-200',
-                  isActive 
+                  "w-full text-left flex items-start gap-3 p-3 rounded-xl border transition-all duration-200",
+                  isActive
                     ? cn(accent.border, accent.bg)
-                    : 'border-border bg-white/[0.02] hover:border-border-hover'
+                    : "border-border bg-white/[0.02] hover:border-border-hover",
                 )}
               >
                 {/* Icon */}
-                <div className={cn(
-                  'w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5',
-                  accent.iconBg
-                )}>
-                  <Icon className={cn('w-4 h-4', accent.iconText)} />
+                <div
+                  className={cn(
+                    "w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5",
+                    accent.iconBg,
+                  )}
+                >
+                  <Icon className={cn("w-4 h-4", accent.iconText)} />
                 </div>
 
                 {/* Content */}
@@ -131,12 +153,12 @@ export const EnhancedCardList = ({ cards }: EnhancedCardListProps) => {
                     <span className="text-sm font-medium text-text-primary">
                       {card.title}
                     </span>
-                    <ChevronRight 
+                    <ChevronRight
                       className={cn(
-                        'w-3 h-3 ml-auto shrink-0 transition-all duration-200',
-                        isActive ? accent.arrow : 'text-text-tertiary',
-                        isActive && 'translate-x-0.5'
-                      )} 
+                        "w-3 h-3 ml-auto shrink-0 transition-all duration-200",
+                        isActive ? accent.arrow : "text-text-tertiary",
+                        isActive && "translate-x-0.5",
+                      )}
                     />
                   </div>
                   <p className="text-xs text-text-tertiary leading-relaxed mt-0.5">
@@ -153,53 +175,63 @@ export const EnhancedCardList = ({ cards }: EnhancedCardListProps) => {
       <AnimatePresence>
         {selectedCard && (
           <>
-            {/* Backdrop */}
+            {/* Backdrop - Darker */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.15 }}
-              className="fixed inset-0 bg-black/20 backdrop-blur-sm z-50"
+              className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50"
               onClick={() => setSelectedCard(null)}
             />
 
-            {/* Overlay Card */}
+            {/* Overlay Card - Dark Mode */}
             <motion.div
               ref={overlayRef}
               initial={{ opacity: 0, x: -8, scale: 0.98 }}
               animate={{ opacity: 1, x: 0, scale: 1 }}
               exit={{ opacity: 0, x: -8, scale: 0.98 }}
-              transition={{ duration: 0.2, ease: 'easeOut' }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
               className={cn(
-                'fixed z-50 left-[340px] top-[180px] w-[400px] max-h-[calc(100vh-220px)]',
-                'overflow-y-auto rounded-2xl border shadow-2xl shadow-black/40',
-                'bg-background-secondary',
-                layerAccent[selectedCard.id].border
+                "fixed z-50 left-[340px] top-[180px] w-[400px] max-h-[calc(100vh-220px)]",
+                "overflow-y-auto rounded-2xl border shadow-2xl shadow-black/40",
+                "bg-[#1a1a24] border-white/10",
               )}
             >
               <div className="p-5">
                 {/* Header */}
                 <div className="flex items-center gap-3 mb-4">
-                  <div className={cn(
-                    'w-9 h-9 rounded-xl flex items-center justify-center shrink-0',
-                    layerAccent[selectedCard.id].iconBg
-                  )}>
+                  <div
+                    className={cn(
+                      "w-9 h-9 rounded-xl flex items-center justify-center shrink-0",
+                      layerAccent[selectedCard.id].iconBg,
+                    )}
+                  >
                     {(() => {
-                      const Icon = iconMap[selectedCard.icon as keyof typeof iconMap] || Database;
-                      return <Icon className={cn('w-4.5 h-4.5', layerAccent[selectedCard.id].iconText)} />;
+                      const Icon =
+                        iconMap[selectedCard.icon as keyof typeof iconMap] ||
+                        Database;
+                      return (
+                        <Icon
+                          className={cn(
+                            "w-4.5 h-4.5",
+                            layerAccent[selectedCard.id].iconText,
+                          )}
+                        />
+                      );
                     })()}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h3 className="text-sm font-semibold text-text-primary">
+                    <h3 className="text-sm font-semibold text-white">
                       {selectedCard.title}
                     </h3>
-                    <p className="text-xs text-text-secondary mt-0.5">
+                    <p className="text-xs text-white/60 mt-0.5">
                       {selectedCard.description}
                     </p>
                   </div>
                   <button
                     onClick={() => setSelectedCard(null)}
-                    className="p-1.5 rounded-lg text-text-tertiary hover:text-text-primary hover:bg-white/[0.05] transition-colors shrink-0"
+                    className="p-1.5 rounded-lg text-white/40 hover:text-white hover:bg-white/[0.08] transition-colors shrink-0"
                     aria-label="Close detail panel"
                   >
                     <X className="w-3.5 h-3.5" />
@@ -219,22 +251,24 @@ export const EnhancedCardList = ({ cards }: EnhancedCardListProps) => {
                         ease: [0.16, 1, 0.3, 1],
                       }}
                       className={cn(
-                        'rounded-xl p-4',
-                        layerAccent[selectedCard.id].bg
+                        "rounded-xl p-4 backdrop-blur-sm border",
+                        layerAccent[selectedCard.id].darkSubCardBg,
                       )}
                     >
                       <div className="flex items-center gap-2 mb-2.5">
-                        <span className={cn(
-                          'inline-block text-[11px] font-semibold uppercase tracking-wide px-2 py-0.5 rounded-md border',
-                          layerAccent[selectedCard.id].tag
-                        )}>
+                        <span
+                          className={cn(
+                            "inline-block text-[11px] font-semibold uppercase tracking-wide px-2 py-0.5 rounded-md",
+                            layerAccent[selectedCard.id].tag,
+                          )}
+                        >
                           {subCard.title}
                         </span>
                       </div>
-                      <p className="text-[12.5px] leading-[1.6] text-text-primary mb-2">
+                      <p className="text-[12.5px] leading-[1.6] text-white/90 mb-2">
                         {subCard.content}
                       </p>
-                      <p className="text-[12px] leading-[1.6] text-text-secondary">
+                      <p className="text-[12px] leading-[1.6] text-white/50">
                         {subCard.description}
                       </p>
                     </motion.div>
