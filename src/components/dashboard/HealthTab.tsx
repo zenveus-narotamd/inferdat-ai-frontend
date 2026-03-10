@@ -12,7 +12,7 @@ import {
   FileStack,
   BarChart3,
   FileText,
-  AlertCircle,
+  Circle,
   CircleDot,
   CheckCircle2,
 } from "lucide-react";
@@ -135,15 +135,15 @@ export const HealthTab = () => {
             <QuickMetricCard
               label="Open Issues"
               value={mockSystemMetrics.openIssues}
-              icon={AlertCircle}
-              color="amber"
+              icon={Circle}
+              color="red"
               index={0}
             />
             <QuickMetricCard
               label="In Progress"
               value={mockSystemMetrics.inProgressIssues}
               icon={CircleDot}
-              color="sky"
+              color="amber"
               index={1}
             />
             <QuickMetricCard
@@ -164,11 +164,9 @@ export const HealthTab = () => {
               Recent Issues
             </h3>
             <div className="space-y-3">
-              {mockIssues
-                .filter((issue) => issue.status !== "resolved")
-                .map((issue, index) => (
-                  <IssueCard key={issue.id} issue={issue} index={index} />
-                ))}
+              {mockIssues.map((issue, index) => (
+                <IssueCard key={issue.id} issue={issue} index={index} />
+              ))}
             </div>
           </motion.div>
         </section>

@@ -169,7 +169,16 @@ export const IssueCard = ({ issue, index }: IssueCardProps) => {
               {issue.title}
             </h3>
             <div className="flex items-center gap-1.5 shrink-0">
-              <StatusIcon className={cn("w-3.5 h-3.5", statusCfg.color)} />
+              <span
+                className={cn(
+                  "inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full",
+                  statusCfg.bg,
+                  statusCfg.color,
+                )}
+              >
+                <StatusIcon className="w-3 h-3" />
+                {statusCfg.label}
+              </span>
             </div>
           </div>
 
@@ -189,17 +198,6 @@ export const IssueCard = ({ issue, index }: IssueCardProps) => {
               )}
             >
               {typeConfig.label}
-            </span>
-
-            {/* Status Badge */}
-            <span
-              className={cn(
-                "inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-md",
-                statusCfg.bg,
-                statusCfg.color,
-              )}
-            >
-              {statusCfg.label}
             </span>
 
             {/* Severity Badge */}

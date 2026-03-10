@@ -275,4 +275,16 @@ export const mockIssues: Issue[] = [
     updatedAt: new Date(Date.now() - 48 * 60 * 60 * 1000),
     affectedComponent: "Guardrails",
   },
+  {
+    id: "issue-9",
+    type: "retrieval_error",
+    title: "Knowledge base query timeout resolved",
+    description:
+      "Optimized OpenSearch query performance, timeout issues no longer occurring",
+    status: "resolved",
+    severity: "medium",
+    createdAt: new Date(Date.now() - 72 * 60 * 60 * 1000),
+    updatedAt: new Date(Date.now() - 2 * 60 * 60 * 1000),
+    affectedComponent: "Knowledge Base",
+  },
 ];
