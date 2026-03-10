@@ -1,7 +1,7 @@
-import { motion } from 'framer-motion';
-import { FileText, Clock, CheckCircle, AlertCircle, XCircle } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import type { Document } from '@/types/ops';
+import { motion } from "framer-motion";
+import { FileText, Clock, CheckCircle, XCircle } from "lucide-react";
+import { cn } from "@/lib/utils";
+import type { Document } from "@/types/ops";
 
 interface DocumentTableProps {
   documents: Document[];
@@ -10,21 +10,21 @@ interface DocumentTableProps {
 const statusConfig = {
   indexed: {
     icon: CheckCircle,
-    text: 'Indexed',
-    color: 'text-emerald-500',
-    bg: 'bg-emerald-500/10',
+    text: "Indexed",
+    color: "text-emerald-500",
+    bg: "bg-emerald-500/10",
   },
   processing: {
     icon: Clock,
-    text: 'Processing',
-    color: 'text-amber-500',
-    bg: 'bg-amber-500/10',
+    text: "Processing",
+    color: "text-amber-500",
+    bg: "bg-amber-500/10",
   },
   failed: {
     icon: XCircle,
-    text: 'Failed',
-    color: 'text-red-500',
-    bg: 'bg-red-500/10',
+    text: "Failed",
+    color: "text-red-500",
+    bg: "bg-red-500/10",
   },
 };
 
@@ -70,7 +70,11 @@ export const DocumentTable = ({ documents }: DocumentTableProps) => {
                   key={doc.id}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, delay: index * 0.03, ease: [0.16, 1, 0.3, 1] }}
+                  transition={{
+                    duration: 0.3,
+                    delay: index * 0.03,
+                    ease: [0.16, 1, 0.3, 1],
+                  }}
                   className="hover:bg-background-tertiary/50 transition-colors"
                 >
                   <td className="px-4 py-3">
@@ -82,18 +86,22 @@ export const DocumentTable = ({ documents }: DocumentTableProps) => {
                     </div>
                   </td>
                   <td className="px-4 py-3">
-                    <span className="text-sm text-text-secondary">{doc.size}</span>
+                    <span className="text-sm text-text-secondary">
+                      {doc.size}
+                    </span>
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-1.5">
-                      <StatusIcon className={cn('w-3.5 h-3.5', config.color)} />
-                      <span className={cn('text-xs font-medium', config.color)}>
+                      <StatusIcon className={cn("w-3.5 h-3.5", config.color)} />
+                      <span className={cn("text-xs font-medium", config.color)}>
                         {config.text}
                       </span>
                     </div>
                   </td>
                   <td className="px-4 py-3">
-                    <span className="text-sm text-text-tertiary">{formatTime(doc.uploadedAt)}</span>
+                    <span className="text-sm text-text-tertiary">
+                      {formatTime(doc.uploadedAt)}
+                    </span>
                   </td>
                 </motion.tr>
               );
