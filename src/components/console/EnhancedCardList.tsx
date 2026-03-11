@@ -185,7 +185,7 @@ export const EnhancedCardList = ({ cards }: EnhancedCardListProps) => {
               onClick={() => setSelectedCard(null)}
             />
 
-            {/* Overlay Card - Dark Mode */}
+            {/* Overlay Card - Light Background */}
             <motion.div
               ref={overlayRef}
               initial={{ opacity: 0, x: -8, scale: 0.98 }}
@@ -195,7 +195,8 @@ export const EnhancedCardList = ({ cards }: EnhancedCardListProps) => {
               className={cn(
                 "fixed z-50 left-[340px] top-[180px] w-[400px] max-h-[calc(100vh-220px)]",
                 "overflow-y-auto rounded-2xl border shadow-2xl shadow-black/40",
-                "bg-[#1a1a24] border-white/10",
+                "bg-white",
+                layerAccent[selectedCard.id].border,
               )}
             >
               <div className="p-5">
@@ -222,23 +223,23 @@ export const EnhancedCardList = ({ cards }: EnhancedCardListProps) => {
                     })()}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h3 className="text-sm font-semibold text-white">
+                    <h3 className="text-sm font-semibold text-text-primary">
                       {selectedCard.title}
                     </h3>
-                    <p className="text-xs text-white/60 mt-0.5">
+                    <p className="text-xs text-text-secondary mt-0.5">
                       {selectedCard.description}
                     </p>
                   </div>
                   <button
                     onClick={() => setSelectedCard(null)}
-                    className="p-1.5 rounded-lg text-white/40 hover:text-white hover:bg-white/[0.08] transition-colors shrink-0"
+                    className="p-1.5 rounded-lg text-text-tertiary hover:text-text-primary hover:bg-black/[0.05] transition-colors shrink-0"
                     aria-label="Close detail panel"
                   >
                     <X className="w-3.5 h-3.5" />
                   </button>
                 </div>
 
-                {/* Sub-cards */}
+                {/* Sub-cards - Light Background with Color Tints */}
                 <div className="space-y-4">
                   {selectedCard.subCards.map((subCard, idx) => (
                     <motion.div
@@ -251,8 +252,9 @@ export const EnhancedCardList = ({ cards }: EnhancedCardListProps) => {
                         ease: [0.16, 1, 0.3, 1],
                       }}
                       className={cn(
-                        "rounded-xl p-4 backdrop-blur-sm border",
-                        layerAccent[selectedCard.id].darkSubCardBg,
+                        "rounded-xl p-4 border",
+                        layerAccent[selectedCard.id].bg,
+                        layerAccent[selectedCard.id].border,
                       )}
                     >
                       <div className="flex items-center gap-2 mb-2.5">
@@ -265,10 +267,10 @@ export const EnhancedCardList = ({ cards }: EnhancedCardListProps) => {
                           {subCard.title}
                         </span>
                       </div>
-                      <p className="text-[12.5px] leading-[1.6] text-white/90 mb-2">
+                      <p className="text-[12.5px] leading-[1.6] text-text-primary mb-2">
                         {subCard.content}
                       </p>
-                      <p className="text-[12px] leading-[1.6] text-white/50">
+                      <p className="text-[12px] leading-[1.6] text-text-secondary">
                         {subCard.description}
                       </p>
                     </motion.div>
